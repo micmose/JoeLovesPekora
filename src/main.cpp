@@ -6,7 +6,7 @@
 #include "lemlib/chassis/trackingWheel.hpp"
 // #include "lemlib/logger/telemetrySink.hpp"
 #include "auton/auton.h"
-//#include "auton/moveIt.h"
+// #include "auton/moveIt.h"
 #include "pros/abstract_motor.hpp"
 #include "pros/adi.hpp"    // IWYU pragma: keep
 #include "pros/device.hpp" // IWYU pragma: keep
@@ -44,7 +44,9 @@ pros::adi::DigitalOut center('h');
 pros::Imu imu(11);
 
 // distance sensor
-pros::Distance lookout(6);
+pros::Distance lookoutB(6);
+
+pros::Distance lookoutF(5);
 
 // horizontal tracking wheel encoder. Rotation sensor
 pros::Rotation horizontalEnc(-13);
@@ -71,11 +73,11 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 12.55,
 
 // lateral motion controller
 lemlib::ControllerSettings
-    linearController(4,  // proportional gain (kP)
+    linearController(6.25,   // proportional gain (kP) 6
                      0,   // integral gain (kI)
-                     .2,   // derivative gain (kD)
-                     0,   // anti windup
-                     0.1, // small error range, in inches
+                     5.2,  // derivative gain (kD)
+                     3,   // anti windup
+                     1, // small error range, in inches
                      100, // small error range timeout, in milliseconds
                      3,   // large error range, in inches
                      500, // large error range timeout, in milliseconds
@@ -86,7 +88,7 @@ lemlib::ControllerSettings
 lemlib::ControllerSettings //
     angularController(10,  // proportional gain (kP)   8.5,  9,   10
                       0,   // integral gain (kI)
-                      54,  // derivative gain (kD) 47.5, 50, 54
+                      56,  // derivative gain (kD) 47.5, 50, 54
                       0,   // anti windup
                       0.1, // small error range, in degrees
                       100, // small error range timeout, in milliseconds
@@ -143,7 +145,7 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() { imu.reset(true); }
+void disabled() {}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -169,14 +171,16 @@ void competition_initialize() {}
  */
 void autonomous() {
   run_auto_skills();
-  //run_auto_left();
-  //run_auto_right();
+  // run_auto_left();
+  // run_auto_right();
+  // run_solo_auto();
 }
 
 // arcade drive
 void opcontrol() {
-  drivetrain.leftMotors->set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
-  drivetrain.rightMotors->set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
+  // drivetrain.leftMotors->set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
+  // drivetrain.rightMotors->set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
+  chassis.setBrakeMode(E_MOTOR_BRAKE_HOLD);
   pros::Task BUTTON_CONTROLS(buttonControls);
   while (true) {
     int Linear = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);

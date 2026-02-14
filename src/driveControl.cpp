@@ -12,7 +12,6 @@ bool isZooming = true;
 
 void buttonControls() {
   while (true) {
-    pros::delay(10);
     if (controller.get_digital_new_press(
             pros::E_CONTROLLER_DIGITAL_R1)) { // R1 toggle to store
       if (isSucking) {
@@ -25,7 +24,6 @@ void buttonControls() {
         isSucking = true;
       }
     }
-    pros::delay(10);
     if (controller.get_digital_new_press(
             pros::E_CONTROLLER_DIGITAL_R2)) { // R2 toggle to score
       if (isReverse) {
@@ -55,7 +53,6 @@ void buttonControls() {
         isWinging = true;
       }
     }
-    pros::delay(10);
     if (controller.get_digital_new_press(
             pros::E_CONTROLLER_DIGITAL_L2)) { // L2 to activate
                                               // matchloader
@@ -67,7 +64,6 @@ void buttonControls() {
         isMatching = true;
       }
     }
-    pros::delay(10);
     if (controller.get_digital_new_press(
             pros::E_CONTROLLER_DIGITAL_A)) { // A to activate center piston for
                                              // scoring
@@ -79,18 +75,13 @@ void buttonControls() {
         isCentering = true;
       }
     }
-    pros::delay(10);
     if (controller.get_digital_new_press(
-            pros::E_CONTROLLER_DIGITAL_B)) { // B toggle to reverse intake
-      if (isSucking) {
-        sucker.move(0);
-        isSucking = false;
-      } else if (!isSucking) {
-        sucker.move(-100);
-        isSucking = true;
-      }
+            pros::E_CONTROLLER_DIGITAL_B)) { // B hold to reverse intake
+      sucker.move(-100);
+    } else if (controller.get_digital_new_release(
+                   pros::E_CONTROLLER_DIGITAL_B)) {
+      sucker.move(0);
     }
-    pros::delay(10);
     if (controller.get_digital_new_press(
             pros::E_CONTROLLER_DIGITAL_X)) { // X toggle to change scoring
                                              // velocity
@@ -100,5 +91,6 @@ void buttonControls() {
         isZooming = true;
       }
     }
+    pros::delay(10);
   }
 }

@@ -52,7 +52,8 @@ extern pros::adi::DigitalOut wingerL;
 extern pros::adi::DigitalOut wingerR;
 extern pros::adi::DigitalOut center;
 extern lemlib::Chassis chassis;
-extern pros::Distance lookout;
+extern pros::Distance lookoutB;
+extern pros::Distance lookoutF;
 
 /**
  * You should add more #includes here
